@@ -1,0 +1,11 @@
+BH1750 Digital Light Sensor: http://www.instructables.com/id/BH1750-Digital-Light-Sensor/
+Light Sensor for Arduino- BH1750 Tutorial: https://www.youtube.com/watch?v=UsLcHSbxf_8
+
+TSL2561 Luminosity Sensor Hookup Guide: https://learn.sparkfun.com/tutorials/tsl2561-luminosity-sensor-hookup-guide
+TSL2561 Light Sensor: https://learn.adafruit.com/light-meter
+TSL2561 luminosity sensor: https://www.adafruit.com/products/439
+The Lux Meter Based On BH1750 Module and Arduino Nano Board: https://www.youtube.com/watch?v=O38GWNdP5Mc
+
+Formulas
+Measuring light with an Arduino: https://arduinodiy.wordpress.com/2013/11/03/measuring-light-with-an-arduino/
+

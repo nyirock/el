@@ -1,0 +1,3 @@
+DataSheets: https://www.arduino.cc/en/Reference/DataSheets
+Built-In Examples: https://www.arduino.cc/en/Tutorial/BuiltInExamples
+While Loop - calibration: https://www.arduino.cc/en/Tutorial/WhileStatementConditional?from=Tutorial.WhileLoop

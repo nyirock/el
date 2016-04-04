@@ -1,0 +1,3 @@
+https://www.youtube.com/watch?v=CjgHIZXNcnw
+https://learn.sparkfun.com/tutorials/microsd-shield-and-sd-breakout-hookup-guide
+https://www.arduino.cc/en/Reference/SDCardNotes

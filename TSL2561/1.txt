@@ -1,0 +1,2 @@
+https://github.com/sparkfun/TSL2561_Luminosity_Sensor_BOB
+https://learn.sparkfun.com/tutorials/tsl2561-luminosity-sensor-hookup-guide

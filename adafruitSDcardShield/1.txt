@@ -1,0 +1,9 @@
+https://learn.adafruit.com/adafruit-data-logger-shield/downloads
+https://learn.adafruit.com/adafruit-data-logger-shield/using-the-real-time-clock
+https://learn.adafruit.com/adafruit-data-logger-shield/using-the-real-time-clock-1
+
+Light and Temperature Logger
+
+https://learn.adafruit.com/adafruit-data-logger-shield/light-and-temperature-logger-use-it
+https://learn.adafruit.com/adafruit-data-logger-shield/using-the-real-time-clock-2
+https://github.com/adafruit/Light-and-Temp-logger

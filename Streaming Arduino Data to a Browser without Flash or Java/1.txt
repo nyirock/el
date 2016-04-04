@@ -1,0 +1,6 @@
+http://blog.concord.org/streaming-arduino-data-to-a-browser
+
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+IPAddress ip(192,168,1,100);
+
+place show.htm and related folder into the webserver directory

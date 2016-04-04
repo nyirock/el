@@ -1,0 +1,9 @@
+http://192.168.0.174/gpio/1
+VCC - 3.3 V on Arduino
+RST - nothing
+CH_PD - 3.3 V on Arduino
+TX - RX on Arduino (TX is transmitting data to RX, so I don't need a voltage divider, right?)
+RX - voltage divider (R1 = 10K, R2 = 20K) - TX on Arduino
+GPIO0 - GND on Arduino
+GPIO2 - nothing
+GND - GND on Arduino

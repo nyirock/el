@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html><head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="a_data/jquery-1.js"></script>
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="a_data/normalize.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="a_data/result-light.css">
+  
+
+  
+
+  <style type="text/css">
+    path {
+          stroke: steelblue;
+          stroke-width: 2;
+          fill: none;
+      }
+
+      line {
+          stroke: black;
+      }
+
+      text {
+          font-family: Arial;
+          font-size: 9pt;
+      }
+
+div {
+    margin: 10px
+}
+
+button {
+    padding: 5px;
+}
+      
+      table { border: 1px solid gray;
+        border-spacing: 0px;
+    margin-left: 25px;
+        border-collapse: collapse;
+        font: 10px/24px Verdana, Arial, Helvetica, sans-serif; }
+        table th {
+          border: 1px solid gray;
+          padding: 0em 0.6em;
+          text-align: center; }
+        table td {
+          font-size: 0.9em;
+          border: 1px solid gray;
+          padding: 0em 1em;
+          text-align: right;}
+        table td.left {
+          padding: 0em 1em 0em 2em;
+    text-align: left; }
+
+#graph {
+    width: 480px;
+    height: 300px;
+}
+
+  </style>
+
+  <title>Arduino Ethernet Values (Embeddable)</title>
+
+  
+    
+
+
+
+
+<script type="text/javascript">//<![CDATA[
+$(window).load(function(){
+(function() {
+    var graph = null,
+        formatter = null,
+        dataSet = [],
+        graphPin = null;
+
+    $(function() {
+        formatter = d3.format("2.2f");
+        graph = simpleGraph('#graph')
+            .title("Arduino Data")
+            .xmax(100).ymax(35)
+            .xLabel("Time")
+            .yLabel("Value");
+
+        $('input').change(startGraphing);
+
+        $('#run-button').click(function() {
+            setInterval(getData, 250);
+            $('#run-button').html("Running...")
+                .attr("disabled", true)
+                .unbind();        
+        });
+    });
+
+    function getData() {
+        $.getJSON("http://192.168.1.100/&callback=?", window.arduinoEthernetComCallback); 
+        /* comment-out the above and uncomment the code below to generate random data */
+        // r = formatter(40 + (Math.random() * 50));
+        // callback('{"A0":' + r + ',"A1":30,"A2":20,"A3":10,"A4":30,"A5":20}');
+    };
+
+    window.arduinoEthernetComCallback = function(jsonData) {
+        data = JSON.parse(jsonData);
+
+        for (pin in data) {
+            var val = data[pin],
+                voltage = (val * 5.0) / 1024.0,
+                conv = $("#" + pin + "-conversion").val(),
+                convValue = convert(voltage, conv);
+            
+            $("#" + pin).html(val);
+            $("#" + pin + "-volts").html(formatter(voltage));
+            $("#" + pin + "-convValue").html(convValue ? formatter(convValue) : "");
+        }
+
+        if (window.graphPin) {
+            value = $("#" + window.graphPin + "-convValue").html() ? 
+                $("#" + window.graphPin + "-convValue").html() : 
+                $("#" + window.graphPin).html();
+            dataSet.push(value);
+            graph.set_data(dataSet);
+        }
+    };
+
+    function startGraphing() {
+        dataSet = [];
+        window.graphPin = this.value;
+    };
+
+
+    function convert(value, type) {
+        return convos[type](value);
+    };
+
+    // set of conversion functions
+    var convos = {
+        none: function(volts) {
+            return "";
+        },
+        L35: function(volts) {
+            return volts * 100;
+        },
+        TMP36: function(volts) {
+            return (volts - 0.5) * 100;
+        },
+        A1301: function(volts) {
+            return ((volts - 2.5) / 2.5) * 1000;
+        },
+    };
+
+})()
+});//]]> 
+
+</script>
+
+  
+</head>
+
+<body>
+  
+
+    <script src="a_data/d3_002.js"></script><script src="a_data/d3.js"></script>
+    <script src="a_data/simple-graph.js"></script>
+
+
+    <button id="run-button">Start Reading</button>
+  <div>
+    The current readings are:
+      <div id="values">
+        <table>
+          <tbody><tr>
+            <th>
+              Pin
+            </th>
+            <th>
+              Value
+            </th>
+            <th>
+              Volts
+            </th>
+            <th>
+              Conversion
+            </th>
+            <th>
+              Converted
+            </th>
+            <th>
+              Graph this?
+            </th>
+          </tr><tr>
+            <th>A0</th>
+            <td id="A0" class="value"></td>
+            <td id="A0-volts" class="volts"></td>
+            <td>
+              <select id="A0-conversion">
+                <option selected="selected" value="none"></option>
+                <option value="L35">L35 temperature</option>
+                <option value="TMP36">TMP36 temperature</option>
+                <option value="A1301">A1301 Hall Effect</option>
+              </select>
+            </td>
+            <td id="A0-convValue">
+            </td>
+            <td>
+              <input name="graphSelection" value="A0" type="radio">
+            </td>
+          </tr>
+          <tr>
+            <th>A1</th>
+            <td id="A1"></td>
+            <td id="A1-volts" class="volts"></td>
+            <td>
+              <select id="A1-conversion">
+                <option selected="selected" value="none"></option>
+                <option value="L35">L35 temperature</option>
+                <option value="TMP36">TMP36 temperature</option>
+                <option value="A1301">A1301 Hall Effect</option>
+              </select>
+            </td>
+            <td id="A1-convValue">
+            </td>
+            <td>
+              <input name="graphSelection" value="A1" type="radio">
+            </td>
+          </tr>
+          <tr>
+            <th>A2</th>
+            <td id="A2"></td>
+            <td id="A2-volts" class="volts"></td>
+            <td>
+              <select id="A2-conversion">
+                <option selected="selected" value="none"></option>
+                <option value="L35">L35 temperature</option>
+                <option value="TMP36">TMP36 temperature</option>
+                <option value="A1301">A1301 Hall Effect</option>
+              </select>
+            </td>
+            <td id="A2-convValue">
+            </td>
+            <td>
+              <input name="graphSelection" value="A2" type="radio">
+            </td>
+          </tr>
+          <tr>
+            <th>A3</th>
+            <td id="A3"></td>
+            <td id="A3-volts" class="volts"></td>
+            <td>
+              <select id="A3-conversion">
+                <option selected="selected" value="none"></option>
+                <option value="L35">L35 temperature</option>
+                <option value="TMP36">TMP36 temperature</option>
+                <option value="A1301">A1301 Hall Effect</option>
+              </select>
+            </td>
+            <td id="A3-convValue">
+            </td>
+            <td>
+              <input name="graphSelection" value="A3" type="radio">
+            </td>
+          </tr>
+          <tr>
+            <th>A4</th>
+            <td id="A4"></td>
+            <td id="A4-volts" class="volts"></td>
+            <td>
+              <select id="A4-conversion">
+                <option selected="selected" value="none"></option>
+                <option value="L35">L35 temperature</option>
+                <option value="TMP36">TMP36 temperature</option>
+                <option value="A1301">A1301 Hall Effect</option>
+              </select>
+            </td>
+            <td id="A4-convValue">
+            </td>
+            <td>
+              <input name="graphSelection" value="A4" type="radio">
+            </td>
+          </tr>
+          <tr>
+            <th>A5</th>
+            <td id="A5"></td>
+            <td id="A5-volts" class="volts"></td>
+            <td>
+              <select id="A5-conversion">
+                <option selected="selected" value="none"></option>
+                <option value="L35">L35 temperature</option>
+                <option value="TMP36">TMP36 temperature</option>
+                <option value="A1301">A1301 Hall Effect</option>
+              </select>
+            </td>
+            <td id="A5-convValue">
+            </td>
+            <td>
+              <input name="graphSelection" value="A5" type="radio">
+            </td>
+          </tr>
+        </tbody></table>
+      </div>
+  </div>
+  <div id="graph">
+  <svg height="300" width="480"><g transform="translate(70,40)"><rect pointer-events="all" style="fill: rgb(238, 238, 238);" height="200" width="380"></rect><svg class="line" viewBox="0 0 380 200" height="200" width="380" left="0" top="0"><path class="line"></path></svg><text style="text-anchor: middle;" dy="-0.8em" x="190" class="title">Arduino Data</text><text style="text-anchor: middle;" dy="2.4em" y="200" x="190" class="axis">Time</text><g><text transform="translate(-40 100) rotate(-90)" style="text-anchor: middle;" class="axis">Value</text></g><g transform="translate(0,0)" class="x"><line y2="200" y1="0" stroke="#666"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">0</text></g><g transform="translate(38,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">10</text></g><g transform="translate(76,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">20</text></g><g transform="translate(114,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">30</text></g><g transform="translate(152,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">40</text></g><g transform="translate(190,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">50</text></g><g transform="translate(228,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">60</text></g><g background-fill="#FFEEB6" transform="translate(0,200)" class="y"><line x2="380" x1="0" stroke="#666"></line><text style="cursor: ns-resize;" text-anchor="end" dy=".35em" x="-3" class="axis">0</text></g><g background-fill="#FFEEB6" transform="translate(0,171.42857142857144)" class="y"><line x2="380" x1="0" stroke="#ccc"></line><text style="cursor: ns-resize;" text-anchor="end" dy=".35em" x="-3" class="axis">5</text></g><g background-fill="#FFEEB6" transform="translate(0,142.85714285714286)" class="y"><line x2="380" x1="0" stroke="#ccc"></line><text style="cursor: ns-resize;" text-anchor="end" dy=".35em" x="-3" class="axis">10</text></g><g background-fill="#FFEEB6" transform="translate(0,114.28571428571429)" class="y"><line x2="380" x1="0" stroke="#ccc"></line><text style="cursor: ns-resize;" text-anchor="end" dy=".35em" x="-3" class="axis">15</text></g><g background-fill="#FFEEB6" transform="translate(0,85.71428571428572)" class="y"><line x2="380" x1="0" stroke="#ccc"></line><text style="cursor: ns-resize;" text-anchor="end" dy=".35em" x="-3" class="axis">20</text></g><g background-fill="#FFEEB6" transform="translate(0,57.14285714285714)" class="y"><line x2="380" x1="0" stroke="#ccc"></line><text style="cursor: ns-resize;" text-anchor="end" dy=".35em" x="-3" class="axis">25</text></g><g background-fill="#FFEEB6" transform="translate(0,28.571428571428584)" class="y"><line x2="380" x1="0" stroke="#ccc"></line><text style="cursor: ns-resize;" text-anchor="end" dy=".35em" x="-3" class="axis">30</text></g><g background-fill="#FFEEB6" transform="translate(0,0)" class="y"><line x2="380" x1="0" stroke="#ccc"></line><text style="cursor: ns-resize;" text-anchor="end" dy=".35em" x="-3" class="axis">35</text></g><g transform="translate(266,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">70</text></g><g transform="translate(304,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">80</text></g><g transform="translate(342,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">90</text></g><g transform="translate(380,0)" class="x"><line y2="200" y1="0" stroke="#ccc"></line><text style="cursor: ew-resize;" text-anchor="middle" dy="1em" y="200" class="axis">100</text></g></g></svg></div>
+
+
+  
+
+
+
+
+</body></html>
