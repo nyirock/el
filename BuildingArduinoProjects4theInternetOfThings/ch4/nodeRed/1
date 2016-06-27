@@ -1,0 +1,4 @@
+install node.js
+http://nodered.org/docs/getting-started/installation.html
+install nodeRed
+npm install -g --unsafe-perm node-red
