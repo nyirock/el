@@ -39,7 +39,8 @@ void loop() {
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   float h = dht.readHumidity();
-  h = h-h*0.057;
+  h = h* 0.962;//empirically adjusted
+  //~ 0.30 difference at ~40% humidity
   
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
@@ -49,7 +50,7 @@ void loop() {
   
   float t2 = dht2.readTemperature();
   float h2 = dht2.readHumidity();
-  h2 = h2 + h2*0.057;
+  h2 = h2 *1.038; //empirically adjusted
   float f2 = dht2.readTemperature(true);
 
   // Check if any reads failed and exit early (to try again).
