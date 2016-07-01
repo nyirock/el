@@ -44,9 +44,9 @@ String read_data(DHT22 sensor, int Flag) {
       //manual adjustment of humidity values: empirical
       h = sensor.getHumidityInt();
       if (Flag == 1)
-        h = h *1.04; //empirically adjusted
+        h = h + 17; //empirically adjusted for both 
       if (Flag == 2)
-        h = h* 0.96;//empirically adjusted
+        h = h - 18;//empirically adjusted
         
       sprintf(buf, "%hi.%01hi, %i.%01i",
               sensor.getTemperatureCInt()/10,
